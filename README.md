@@ -2,6 +2,8 @@
 
 I built this tool to test a batch of Gemini API keys in one run without installing any packages. Paste your keys into the browser, and a local Node server checks each one and groups the results by status.
 
+![Gemini Batch Key Check UI](screenshot.png)
+
 ## Why a local server
 
 The web page sends each check to a local Node server instead of calling Google directly from the browser. That keeps your keys on your machine and avoids third-party key-checker sites.
