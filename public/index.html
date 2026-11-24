@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemini Batch Key Check</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@600;700&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand"><span class="dot" aria-hidden="true"></span>Gemini Batch Key Check</div>
+    <span class="tag">bulk · health · local</span>
+  </header>
+
+  <section class="hero">
+    <h1>Check a whole list of keys, <em>in one run.</em></h1>
+    <p class="lede">Paste your keys and press check. Each key gets one clear status: working, out of quota, or broken. Keys are partly masked on screen.</p>
+  </section>
+
+  <section class="card" aria-labelledby="h-in">
+    <h2 id="h-in">1 · Key list</h2>
+    <label style="font:inherit">
+      <span class="hint">One key per line, or separate keys with commas or spaces.</span>
+      <textarea id="input" placeholder="AIzaSy...&#10;AIzaSy...&#10;..." spellcheck="false"></textarea>
+    </label>
+    <div class="row">
+      <label>Model
+        <input type="text" id="model" value="gemini-decision-1">
+      </label>
+      <label>Concurrency
+        <input type="number" id="concurrency" value="5" min="1" max="20">
+      </label>
+      <label>API server (empty = same origin)
+        <input type="text" id="apiBase" placeholder="http://localhost:3000">
+      </label>
+      <div class="spacer"></div>
+      <button id="btnClear" class="ghost">Clear all</button>
+      <button id="btnReset">Reset results</button>
+      <button id="btnCheck" class="primary">Check all keys</button>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h-out">
+    <h2 id="h-out">2 · Results</h2>
+    <div class="tiles" id="summary"></div>
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+    <div class="toolbar">
+      <button id="btnCopyOk" class="ghost">Copy OK keys</button>
+      <button id="btnFilter" class="ghost" hidden>Clear filter</button>
+      <span class="tag" id="status" role="status"></span>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>API key</th><th>Result</th><th>HTTP</th><th>Latency</th><th>Details</th><th></th></tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
