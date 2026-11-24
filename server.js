@@ -55,7 +55,12 @@ async function checkKey(key, model) {
       signal: ctrl.signal,
     });
     const latency = Date.now() - start;
-    const data = await r.json().catch(() => null);
+    const rawText = await r.text();
+    let data = null;
+    try { data = JSON.parse(rawText); } catch (_) {}
+    if (!r.ok) {
+      console.error(`[check] ${key.slice(0, 6)}… model=${model} HTTP ${r.status}: ${rawText.slice(0, 500)}`);
+    }
 
     if (r.ok) {
       const ans = data?.answers?.ping;
@@ -67,7 +72,7 @@ async function checkKey(key, model) {
 
     const err = data?.error || {};
     const reason = (err.details || []).find((d) => d.reason)?.reason || '';
-    const msg = err.message || `HTTP ${r.status}`;
+    const msg = err.message || rawText.slice(0, 200) || `HTTP ${r.status}`;
 
     let state = 'error';
     if (r.status === 429) state = 'quota';
@@ -78,6 +83,7 @@ async function checkKey(key, model) {
     return { state, http: r.status, latency, message: msg };
   } catch (e) {
     const latency = Date.now() - start;
+    console.error('[check] exception:', e.name, e.message, e.cause || '');
     if (e.name === 'AbortError') {
       return { state: 'timeout', http: 0, latency, message: `Timed out after ${TIMEOUT_MS / 1000}s` };
     }
